@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-void getLocation() async {
+class Location{
+
+Position _position;
+ double _latitude ;
+ double _longitude;
+
+Future <void> getCurrentLocation() async {
     try{
-    Position position = await Geolocator.getCurrentPosition(
+    _position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
-    print(position);
+    print(_position);
+    _latitude = _position.latitude;
+    _longitude = _position.longitude;
     }
     catch (e){
       print(e);
     }
   }
+  double getLatitude() {
+   return   _latitude;
+  }
+  double getLongitude() {
+    return  _longitude;
+  }
+}
