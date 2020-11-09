@@ -3,46 +3,49 @@ import 'package:clima/services/location.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+const apiKey = '6372b6980a99130bc0d9e18e32b87e9e';
+
 class LoadingScreen extends StatefulWidget {
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
 
-
 class _LoadingScreenState extends State<LoadingScreen> {
-  
-@override
+  double latitude;
+  double longitude;
+  @override
   void initState() {
-    
     super.initState();
     getLocation();
   }
-   void getLocation() async{
+
+  void getLocation() async {
     Location currentLocation = Location();
     await currentLocation.getCurrentLocation();
-    print(currentLocation.getLatitude());
-    print(currentLocation.getLongitude());
+    latitude = currentLocation.getLatitude();
+    longitude = currentLocation.getLongitude();
+    getData();
   }
-  void getData() async{
-    http.Response response = await http.get('https://samples.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22');
-     if(response.statusCode==200){
-       String data = response.body;
-       var decodedData = jsonDecode(data);
-       var temperature = decodedData['main']['temp'];
-       var condition = decodedData['weather'][0]['id'];
-       var cityName = decodedData['name'];
-       print(temperature);
-       print(condition);
-       print(cityName);
-     } else{
-       print(response.statusCode);
-     }
+
+  void getData() async {
+    http.Response response = await http.get(
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
+    if (response.statusCode == 200) {
+      String data = response.body;
+      var decodedData = jsonDecode(data);
+      var temperature = decodedData['main']['temp'];
+      var condition = decodedData['weather'][0]['id'];
+      var cityName = decodedData['name'];
+      print(temperature);
+      print(condition);
+      print(cityName);
+    } else {
+      print(response.statusCode);
+    }
   }
+
   @override
   Widget build(BuildContext context) {
-    getData();
-    return Scaffold(
-      
-    );
+    return Scaffold();
   }
 }
