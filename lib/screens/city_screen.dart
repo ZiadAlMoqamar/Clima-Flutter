@@ -49,6 +49,7 @@ class _CityScreenState extends State<CityScreen> {
                 ),
               ),
               FlatButton(
+                color: Colors.blueAccent,
                 onPressed: () {
                   Navigator.pop(context, cityName);
                 },
